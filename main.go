@@ -6,6 +6,8 @@ import (
 
 	"fmt"
 	"os/exec"
+
+	"github.com/just-nibble/LinuxAuto/fedora"
 )
 
 func getDistro() string {
@@ -36,7 +38,7 @@ func main() {
 		inputs["steam"] = g.steam.Checked
 		inputs["telegram-desktop"] = g.telegram_desktop.Checked
 		inputs["wine"] = g.wine.Checked
-
+		fedora.BulkInstall(inputs)
 	}
 	w.Resize(fyne.NewSize(624, 556))
 	w.ShowAndRun()
