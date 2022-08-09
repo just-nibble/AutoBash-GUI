@@ -1,0 +1,387 @@
+{
+  "Type": "*fyne.Container",
+  "Layout": "VBox",
+  "Name": "",
+  "Objects": [
+    {
+      "Type": "*widget.Label",
+      "Name": "",
+      "Struct": {
+        "Hidden": false,
+        "Text": "Automate your linux installs",
+        "Alignment": 0,
+        "Wrapping": 0,
+        "TextStyle": {
+          "Bold": false,
+          "Italic": false,
+          "Monospace": false,
+          "Symbol": false,
+          "TabWidth": 0
+        }
+      }
+    },
+    {
+      "Type": "*widget.Separator",
+      "Name": "",
+      "Struct": {
+        "Hidden": false
+      }
+    },
+    {
+      "Type": "*widget.Label",
+      "Name": "",
+      "Struct": {
+        "Hidden": false,
+        "Text": "Official Packages",
+        "Alignment": 0,
+        "Wrapping": 0,
+        "TextStyle": {
+          "Bold": false,
+          "Italic": false,
+          "Monospace": false,
+          "Symbol": false,
+          "TabWidth": 0
+        }
+      }
+    },
+    {
+      "Type": "*fyne.Container",
+      "Layout": "HBox",
+      "Name": "",
+      "Objects": [
+        {
+          "Type": "*widget.Check",
+          "Name": "docker",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Docker",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "httrack",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Httrack",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "kvm",
+          "Struct": {
+            "Hidden": false,
+            "Text": "KVM",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "lutris",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Lutris",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "steam",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Steam",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "base_devel",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Base-Devel",
+            "Checked": true
+          }
+        }
+      ],
+      "Properties": {
+        "dir": "horizontal",
+        "layout": "HBox"
+      }
+    },
+    {
+      "Type": "*fyne.Container",
+      "Layout": "HBox",
+      "Name": "",
+      "Objects": [
+        {
+          "Type": "*widget.Check",
+          "Name": "telegram_desktop",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Telegram",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "wine",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Wine",
+            "Checked": true
+          }
+        }
+      ],
+      "Properties": {
+        "dir": "horizontal",
+        "layout": "HBox"
+      }
+    },
+    {
+      "Type": "*widget.Separator",
+      "Name": "",
+      "Struct": {
+        "Hidden": false
+      }
+    },
+    {
+      "Type": "*widget.Label",
+      "Name": "",
+      "Struct": {
+        "Hidden": false,
+        "Text": "AUR",
+        "Alignment": 0,
+        "Wrapping": 0,
+        "TextStyle": {
+          "Bold": false,
+          "Italic": false,
+          "Monospace": false,
+          "Symbol": false,
+          "TabWidth": 0
+        }
+      }
+    },
+    {
+      "Type": "*fyne.Container",
+      "Layout": "HBox",
+      "Name": "",
+      "Objects": [
+        {
+          "Type": "*widget.Check",
+          "Name": "",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Spotify",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Tick it or don't",
+            "Checked": false
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Tick it or don't",
+            "Checked": false
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Tick it or don't",
+            "Checked": false
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Tick it or don't",
+            "Checked": false
+          }
+        }
+      ],
+      "Properties": {
+        "dir": "horizontal",
+        "layout": "HBox"
+      }
+    },
+    {
+      "Type": "*widget.Separator",
+      "Name": "",
+      "Struct": {
+        "Hidden": false
+      }
+    },
+    {
+      "Type": "*widget.Label",
+      "Name": "",
+      "Struct": {
+        "Hidden": false,
+        "Text": "Flatpaks",
+        "Alignment": 0,
+        "Wrapping": 0,
+        "TextStyle": {
+          "Bold": false,
+          "Italic": false,
+          "Monospace": false,
+          "Symbol": false,
+          "TabWidth": 0
+        }
+      }
+    },
+    {
+      "Type": "*fyne.Container",
+      "Layout": "Max",
+      "Name": "",
+      "Objects": [
+        {
+          "Type": "*widget.Check",
+          "Name": "bitwarden",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Bitwarden",
+            "Checked": true
+          }
+        }
+      ],
+      "Properties": {
+        "layout": "Max"
+      }
+    },
+    {
+      "Type": "*widget.Separator",
+      "Name": "",
+      "Struct": {
+        "Hidden": false
+      }
+    },
+    {
+      "Type": "*widget.Label",
+      "Name": "",
+      "Struct": {
+        "Hidden": false,
+        "Text": "Snaps",
+        "Alignment": 0,
+        "Wrapping": 0,
+        "TextStyle": {
+          "Bold": false,
+          "Italic": false,
+          "Monospace": false,
+          "Symbol": false,
+          "TabWidth": 0
+        }
+      }
+    },
+    {
+      "Type": "*fyne.Container",
+      "Layout": "HBox",
+      "Name": "",
+      "Objects": [
+        {
+          "Type": "*widget.Check",
+          "Name": "onlyOffice",
+          "Struct": {
+            "Hidden": false,
+            "Text": "OnlyOffice",
+            "Checked": true
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "vsCode",
+          "Struct": {
+            "Hidden": false,
+            "Text": "VsCode",
+            "Checked": true
+          }
+        }
+      ],
+      "Properties": {
+        "dir": "horizontal",
+        "layout": "HBox"
+      }
+    },
+    {
+      "Type": "*widget.Separator",
+      "Name": "",
+      "Struct": {
+        "Hidden": false
+      }
+    },
+    {
+      "Type": "*widget.Label",
+      "Name": "",
+      "Struct": {
+        "Hidden": false,
+        "Text": "Configurations",
+        "Alignment": 0,
+        "Wrapping": 0,
+        "TextStyle": {
+          "Bold": false,
+          "Italic": false,
+          "Monospace": false,
+          "Symbol": false,
+          "TabWidth": 0
+        }
+      }
+    },
+    {
+      "Type": "*fyne.Container",
+      "Layout": "HBox",
+      "Name": "",
+      "Objects": [
+        {
+          "Type": "*widget.Check",
+          "Name": "docker_config",
+          "Struct": {
+            "Hidden": false,
+            "Text": "Docker",
+            "Checked": false
+          }
+        },
+        {
+          "Type": "*widget.Check",
+          "Name": "kvm_config",
+          "Struct": {
+            "Hidden": false,
+            "Text": "KVM",
+            "Checked": true
+          }
+        }
+      ],
+      "Properties": {
+        "dir": "horizontal",
+        "layout": "HBox"
+      }
+    },
+    {
+      "Type": "*widget.Button",
+      "Name": "submit",
+      "Struct": {
+        "Hidden": false,
+        "Text": "Proceed",
+        "Icon": "ConfirmIcon",
+        "Importance": 0,
+        "Alignment": 0,
+        "IconPlacement": 0
+      }
+    }
+  ],
+  "Properties": {
+    "dir": "vertical",
+    "layout": "VBox"
+  }
+}
