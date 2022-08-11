@@ -1,4 +1,4 @@
-package fedora
+package redhat
 
 import (
 	"bufio"
@@ -10,8 +10,7 @@ import (
 // flatpak remove
 
 // Execute Arch install
-func BulkInstall(inputs map[string]bool) {
-	fmt.Println("start")
+func BulkInstall(inputs map[string]bool, password string) {
 	// var BaseGitCommand string = "git clone"
 	commands := map[string]map[string][]string{
 		"official_repos": {
@@ -67,7 +66,6 @@ func BulkInstall(inputs map[string]bool) {
 			for _, outer := range commands["official_repos"] {
 				for _, value := range outer {
 
-					fmt.Printf("Installing %s", value)
 					cmd := exec.Command("sudo", "dnf", "install", value, "-y")
 					cmdReader, err := cmd.StdoutPipe()
 

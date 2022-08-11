@@ -8,24 +8,31 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"github.com/just-nibble/LinuxAuto/arch"
-	"github.com/just-nibble/LinuxAuto/fedora"
+	"github.com/just-nibble/LinuxAuto/redhat"
 
 	"fmt"
 	"os/exec"
 )
 
-func getDistro() string {
-	result, err := exec.Command("uname", "-a").Output()
+func getDistro() (string, string) {
+	//ls /etc/*release
+	result, err := exec.Command("/bin/sh", "-c", "sh ./getDistro.sh").Output()
+	// cmd := exec.Command("/bin/sh", "-c", "./getDistro.sh")
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
 	long_string := string(result[:])
 	distro_array := strings.Fields(long_string)
-	distro := distro_array[1]
-	return distro
+
+	pre_distro := strings.ReplaceAll(distro_array[0], "/etc/", "")
+	distro := strings.ReplaceAll(pre_distro, "-release", "")
+
+	pre_parent := strings.ReplaceAll(distro_array[2], "/etc/", "")
+	parent := strings.ReplaceAll(pre_parent, "-release", "")
+	return distro, parent
 }
 
-func runPopUp(w fyne.Window, input_checked map[string]bool, distro string) (modal *widget.PopUp) {
+func runPopUp(w fyne.Window, input_checked map[string]bool, parent string) (modal *widget.PopUp) {
 	input := widget.NewPasswordEntry()
 	modal = widget.NewModalPopUp(
 		container.NewVBox(
@@ -33,9 +40,13 @@ func runPopUp(w fyne.Window, input_checked map[string]bool, distro string) (moda
 			input,
 			widget.NewButton(
 				"Enter", func() {
-					fmt.Println(input.Text)
+					switch parent {
+					case "redhat":
+						redhat.BulkInstall(input_checked, input.Text)
+					case "arch":
+						arch.BulkInstall(input_checked)
+					}
 					modal.Hide()
-
 				},
 			),
 			widget.NewButton("Close", func() { modal.Hide() }),
@@ -43,19 +54,14 @@ func runPopUp(w fyne.Window, input_checked map[string]bool, distro string) (moda
 		w.Canvas(),
 	)
 	modal.Show()
-	switch distro {
-	case "fedora":
-		fedora.BulkInstall(input_checked)
-	case "arch":
-		arch.BulkInstall(input_checked)
-	}
 	return modal
 }
 
 func main() {
 
 	inputs := map[string]bool{}
-	var distro string = "You are on " + getDistro()
+	distro_name, parent := getDistro()
+	var distro string = "You are on " + distro_name
 	a := app.New()
 	w := a.NewWindow("LinuxAuto-GUI")
 
@@ -72,8 +78,7 @@ func main() {
 		inputs["steam"] = g.steam.Checked
 		inputs["telegram-desktop"] = g.telegram_desktop.Checked
 		inputs["wine"] = g.wine.Checked
-		runPopUp(w, inputs, distro)
-		// fedora.BulkInstall(inputs)
+		runPopUp(w, inputs, parent)
 	}
 	w.Resize(fyne.NewSize(624, 556))
 	w.ShowAndRun()
