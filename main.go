@@ -3,11 +3,11 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
 
 	"fmt"
 	"os/exec"
-
-	"github.com/just-nibble/LinuxAuto/fedora"
 )
 
 func getDistro() string {
@@ -17,6 +17,27 @@ func getDistro() string {
 	}
 	output := string(out[:])
 	return output
+}
+
+func runPopUp(w fyne.Window, input_checked map[string]bool) (modal *widget.PopUp) {
+	input := widget.NewPasswordEntry()
+	modal = widget.NewModalPopUp(
+		container.NewVBox(
+			widget.NewLabel("Enter Password"),
+			input,
+			widget.NewButton(
+				"Enter", func() {
+					fmt.Println(input.Text)
+					modal.Hide()
+
+				},
+			),
+			widget.NewButton("Close", func() { modal.Hide() }),
+		),
+		w.Canvas(),
+	)
+	modal.Show()
+	return modal
 }
 
 func main() {
@@ -38,7 +59,8 @@ func main() {
 		inputs["steam"] = g.steam.Checked
 		inputs["telegram-desktop"] = g.telegram_desktop.Checked
 		inputs["wine"] = g.wine.Checked
-		fedora.BulkInstall(inputs)
+		runPopUp(w, inputs)
+		// fedora.BulkInstall(inputs)
 	}
 	w.Resize(fyne.NewSize(624, 556))
 	w.ShowAndRun()
