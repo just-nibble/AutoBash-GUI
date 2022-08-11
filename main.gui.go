@@ -11,6 +11,7 @@ import (
 )
 
 type gui struct {
+	distro           *widget.Label
 	docker           *widget.Check
 	httrack          *widget.Check
 	kvm              *widget.Check
@@ -32,6 +33,7 @@ func newGUI() *gui {
 }
 
 func (g *gui) makeUI() fyne.CanvasObject {
+	g.distro = widget.NewLabel("")
 	g.docker_config = widget.NewCheck("Docker", func(b bool) {})
 	g.docker = widget.NewCheck("Docker", func(b bool) {})
 	g.httrack = widget.NewCheck("Httrack", func(b bool) {})
@@ -49,6 +51,7 @@ func (g *gui) makeUI() fyne.CanvasObject {
 
 	return container.NewVBox(
 		widget.NewLabel("Automate your linux installs"),
+		g.distro,
 		widget.NewSeparator(),
 		widget.NewLabel("Official Packages"),
 		container.NewHBox(
