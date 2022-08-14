@@ -14,10 +14,8 @@ import (
 	"os/exec"
 )
 
-func getDistro() (string, string) {
-	//ls /etc/*release
+func getDistro() string {
 	result, err := exec.Command("/bin/sh", "-c", "sh ./getDistro.sh").Output()
-	// cmd := exec.Command("/bin/sh", "-c", "./getDistro.sh")
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
@@ -27,9 +25,7 @@ func getDistro() (string, string) {
 	pre_distro := strings.ReplaceAll(distro_array[0], "/etc/", "")
 	distro := strings.ReplaceAll(pre_distro, "-release", "")
 
-	pre_parent := strings.ReplaceAll(distro_array[2], "/etc/", "")
-	parent := strings.ReplaceAll(pre_parent, "-release", "")
-	return distro, parent
+	return distro
 }
 
 func runPopUp(w fyne.Window, input_checked map[string]bool, parent string) (modal *widget.PopUp) {
@@ -44,6 +40,7 @@ func runPopUp(w fyne.Window, input_checked map[string]bool, parent string) (moda
 					case "redhat":
 						redhat.BulkInstall(input_checked, input.Text)
 					case "arch":
+						fmt.Println("Arch started")
 						arch.BulkInstall(input_checked)
 					}
 					modal.Hide()
@@ -60,13 +57,15 @@ func runPopUp(w fyne.Window, input_checked map[string]bool, parent string) (moda
 func main() {
 
 	inputs := map[string]bool{}
-	distro_name, parent := getDistro()
+	var distro_name string = getDistro()
 	var distro string = "You are on " + distro_name
+
 	a := app.New()
 	w := a.NewWindow("LinuxAuto-GUI")
-
 	g := newGUI()
 	w.SetContent(g.makeUI())
+
+	exec.Command("pkexec", "su").Output()
 
 	g.distro.SetText(distro)
 	g.submit.OnTapped = func() {
@@ -78,7 +77,7 @@ func main() {
 		inputs["steam"] = g.steam.Checked
 		inputs["telegram-desktop"] = g.telegram_desktop.Checked
 		inputs["wine"] = g.wine.Checked
-		runPopUp(w, inputs, parent)
+		runPopUp(w, inputs, distro_name)
 	}
 	w.Resize(fyne.NewSize(624, 556))
 	w.ShowAndRun()

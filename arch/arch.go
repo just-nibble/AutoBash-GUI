@@ -63,9 +63,7 @@ func BulkInstall(inputs map[string]bool) {
 		case "official_repos":
 			for _, outer := range commands["official_repos"] {
 				for _, value := range outer {
-					fmt.Printf("Installing %s", value)
-
-					out, err := exec.Command("sudo", "pacman", "-Syu", value, "--noconfirm").Output()
+					out, err := exec.Command("pacman", "-Syu", value, "--noconfirm").Output()
 
 					if err != nil {
 						fmt.Printf("%s install fail\n", err)
@@ -79,9 +77,7 @@ func BulkInstall(inputs map[string]bool) {
 		case "flatpaks":
 			for _, outer := range commands["flatpaks"] {
 				for _, value := range outer {
-					fmt.Printf("Installing %s", value)
-
-					out, err := exec.Command("sudo", "flatpak", "install", "-y", value).Output()
+					out, err := exec.Command("flatpak", "install", "-y", value).Output()
 
 					if err != nil {
 						fmt.Printf("%s", err)
