@@ -28,24 +28,20 @@ func getDistro() string {
 	return distro
 }
 
+func install(input map[string]bool, parent string) {
+	switch parent {
+	case "redhat":
+		redhat.BulkInstall(input)
+	case "arch":
+		arch.BulkInstall(input)
+	}
+}
+
 func runPopUp(w fyne.Window, input_checked map[string]bool, parent string) (modal *widget.PopUp) {
-	input := widget.NewPasswordEntry()
 	modal = widget.NewModalPopUp(
 		container.NewVBox(
-			widget.NewLabel("Enter Password"),
-			input,
-			widget.NewButton(
-				"Enter", func() {
-					switch parent {
-					case "redhat":
-						redhat.BulkInstall(input_checked, input.Text)
-					case "arch":
-						fmt.Println("Arch started")
-						arch.BulkInstall(input_checked)
-					}
-					modal.Hide()
-				},
-			),
+			arch.Output,
+			widget.NewButton("Start", func() { install(input_checked, parent) }),
 			widget.NewButton("Close", func() { modal.Hide() }),
 		),
 		w.Canvas(),
@@ -65,7 +61,7 @@ func main() {
 	g := newGUI()
 	w.SetContent(g.makeUI())
 
-	exec.Command("pkexec", "su").Output()
+	exec.Command("pkexec", "sudo", "su", "&&", "rm", "/var/lib/pacman/db.lck").Output()
 
 	g.distro.SetText(distro)
 	g.submit.OnTapped = func() {

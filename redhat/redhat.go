@@ -10,7 +10,7 @@ import (
 // flatpak remove
 
 // Execute Arch install
-func BulkInstall(inputs map[string]bool, password string) {
+func BulkInstall(inputs map[string]bool) {
 	// var BaseGitCommand string = "git clone"
 	commands := map[string]map[string][]string{
 		"official_repos": {

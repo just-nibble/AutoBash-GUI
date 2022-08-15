@@ -1,11 +1,19 @@
 package arch
 
 import (
+	"bufio"
 	"fmt"
+	"fyne.io/fyne/v2/widget"
+	"log"
 	"os/exec"
 )
 
 // flatpak remove
+var Output *widget.Label = widget.NewLabel("")
+
+func updateProgress(outputLabel *widget.Label, outputText string) {
+	outputLabel.SetText(outputText)
+}
 
 // Execute Arch install
 func BulkInstall(inputs map[string]bool) {
@@ -63,30 +71,54 @@ func BulkInstall(inputs map[string]bool) {
 		case "official_repos":
 			for _, outer := range commands["official_repos"] {
 				for _, value := range outer {
-					out, err := exec.Command("pacman", "-Syu", value, "--noconfirm").Output()
-
+					cmd := exec.Command("sudo", "pacman", "-Syu", value)
+					cmdReader, err := cmd.StdoutPipe()
 					if err != nil {
 						fmt.Printf("%s install fail\n", err)
 					} else {
-						fmt.Printf("%s successfully installed", value)
-						output := string(out[:])
-						fmt.Println(output)
-					}
-				}
-			}
-		case "flatpaks":
-			for _, outer := range commands["flatpaks"] {
-				for _, value := range outer {
-					out, err := exec.Command("flatpak", "install", "-y", value).Output()
+						scanner := bufio.NewScanner(cmdReader)
+						go func() {
+							for scanner.Scan() {
+								fmt.Println(scanner.Text())
+								updateProgress(Output, scanner.Text())
+							}
+						}()
 
-					if err != nil {
-						fmt.Printf("%s", err)
+						if err := cmd.Start(); err != nil {
+							log.Fatal(err)
+						}
+						if err := cmd.Wait(); err != nil {
+							log.Fatal(err)
+						}
 					}
-					fmt.Printf("%s successfully installed", value)
-					output := string(out[:])
-					fmt.Println(output)
 				}
 			}
+			// case "flatpaks":
+			// 	for _, outer := range commands["flatpaks"] {
+			// 		for _, value := range outer {
+			// 			cmd := exec.Command("flatpak", "install", "-y", value)
+			// 			cmdReader, err := cmd.StdoutPipe()
+
+			// 			if err != nil {
+			// 				fmt.Printf("%s install fail\n", err)
+			// 			} else {
+			// 				scanner := bufio.NewScanner(cmdReader)
+			// 				go func() {
+			// 					for scanner.Scan() {
+			// 						fmt.Println(scanner.Text())
+			// 						Output = append(Output, scanner.Text())
+			// 					}
+			// 				}()
+
+			// 				if err := cmd.Start(); err != nil {
+			// 					log.Fatal(err)
+			// 				}
+			// 				if err := cmd.Wait(); err != nil {
+			// 					log.Fatal(err)
+			// 				}
+			// 			}
+			// 		}
+			// 	}
 		}
 
 	}
