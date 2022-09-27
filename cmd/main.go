@@ -1,18 +1,21 @@
 package main
 
 import (
+	"bufio"
+	"log"
 	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"github.com/just-nibble/LinuxAuto/arch"
-	"github.com/just-nibble/LinuxAuto/redhat"
+	"github.com/just-nibble/LinuxAuto/pkg"
 
 	"fmt"
 	"os/exec"
 )
+
+// readlink "/proc/$(cat /proc/$(echo $$)/stat|cut -d ' ' -f 4)/exe"
 
 func getDistro() string {
 	result, err := exec.Command("/bin/sh", "-c", "sh ./getDistro.sh").Output()
@@ -28,40 +31,72 @@ func getDistro() string {
 	return distro
 }
 
-func install(input map[string]bool, parent string) {
+func softwareInstall(input map[string]bool, parent string) {
+	var command []string = []string{"pacman", "-Syu"}
+
+	var packages map[string][]string
+
 	switch parent {
 	case "redhat":
-		redhat.BulkInstall(input)
+		packages = pkg.RedHatPackages()
 	case "arch":
-		arch.BulkInstall(input)
+		packages = pkg.ArchPackages()
 	}
+
+	for key, value := range input {
+		if strings.Contains(key, "setup") {
+			continue
+		} else if value {
+			command = append(command, packages[key]...)
+		}
+	}
+	command = append(command, "--no-confirm")
+	cmd := exec.Command("pkexec", command...)
+	cmdReader, err := cmd.StdoutPipe()
+	if err != nil {
+		fmt.Printf("%s install fail\n", err)
+	} else {
+		scanner := bufio.NewScanner(cmdReader)
+		go func() {
+			for scanner.Scan() {
+				pkg.UpdateProgress(pkg.Output, scanner.Text())
+			}
+		}()
+
+		if err := cmd.Start(); err != nil {
+			log.Fatal(err)
+		}
+		if err := cmd.Wait(); err != nil {
+			log.Fatal(err)
+		}
+	}
+
 }
 
 func runPopUp(w fyne.Window, input_checked map[string]bool, parent string) (modal *widget.PopUp) {
+	var outPutLabel *widget.Label = pkg.Output
 	modal = widget.NewModalPopUp(
 		container.NewVBox(
-			arch.Output,
-			widget.NewButton("Start", func() { install(input_checked, parent) }),
+			outPutLabel,
+			widget.NewButton("Start", func() { softwareInstall(input_checked, parent) }),
 			widget.NewButton("Close", func() { modal.Hide() }),
 		),
 		w.Canvas(),
 	)
+	modal.Resize(fyne.NewSize(300, 300))
 	modal.Show()
 	return modal
 }
 
 func main() {
-
 	inputs := map[string]bool{}
 	var distro_name string = getDistro()
 	var distro string = "You are on " + distro_name
 
 	a := app.New()
-	w := a.NewWindow("LinuxAuto-GUI")
+	w := a.NewWindow("LinuxAuto")
 	g := newGUI()
 	w.SetContent(g.makeUI())
-
-	exec.Command("pkexec", "sudo", "su", "&&", "rm", "/var/lib/pacman/db.lck").Output()
 
 	g.distro.SetText(distro)
 	g.submit.OnTapped = func() {
@@ -77,4 +112,5 @@ func main() {
 	}
 	w.Resize(fyne.NewSize(624, 556))
 	w.ShowAndRun()
+
 }
